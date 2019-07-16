@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>0cfd0197-7468-4677-8799-cd0a7c3da519</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>auv_bin_class.py</StartupFile>
+    <StartupFile>eval.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>

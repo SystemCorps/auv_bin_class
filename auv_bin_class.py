@@ -28,7 +28,12 @@ class LossHistory(keras.callbacks.Callback):
 
 
 def main():
+    # Parameters
     batch_size = 32
+    num_epoch = 10
+    val_period = 10
+    num_trial = 20
+
 
     base_model = MobileNetV2(weights='imagenet', include_top=False)
     base_model2 = MobileNetV2(weights='imagenet')
@@ -50,8 +55,8 @@ def main():
             layer.trainable = True
         
     train_datagen = ImageDataGenerator(preprocessing_function = preprocess_input)
-    test_datagen = ImageDataGenerator(rescale = 1./255)
-    valid_datagen = ImageDataGenerator(rescale = 1./255)
+    test_datagen = ImageDataGenerator(preprocessing_function = preprocess_input)
+    valid_datagen = ImageDataGenerator(preprocessing_function = preprocess_input)
 
     train_generator = train_datagen.flow_from_directory('D:/Data/clearness/train',
                                                      target_size = (224, 224),
@@ -75,15 +80,10 @@ def main():
 
     step_size_train = train_generator.n//train_generator.batch_size
 
-    #history = model.fit_generator(generator=train_generator,
-    #                              steps_per_epoch = step_size_train,
-    #                              epochs = 10)
-
-
 
     loss = LossHistory()
     reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=3, min_lr=0, mode='auto')
-    num_trial = 0
+    
     tensorboard = TensorBoard(log_dir='./results/logs_{}'.format(num_trial),
                               histogram_freq=0, batch_size=batch_size, 
                               write_graph=True, write_grads=False, write_images=False,
@@ -97,9 +97,6 @@ def main():
     filepath = './results/check/check_{}'.format(num_trial)
     checkpointer = ModelCheckpoint(filepath=filepath, monitor='val_loss', verbose=1, save_best_only=True, mode='min')
 
-
-    num_epoch = 10
-    val_period = 10
 
 
     history = model.fit_generator(generator=train_generator,
