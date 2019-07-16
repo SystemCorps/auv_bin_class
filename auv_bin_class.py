@@ -62,12 +62,13 @@ def main():
     test_generator = test_datagen.flow_from_directory('D:/Data/clearness/test',
                                                 target_size = (224, 224),
                                                 batch_size = batch_size,
-                                                shuffle=True,
+                                                shuffle=False,
                                                 class_mode = 'categorical')
 
     valid_generator = valid_datagen.flow_from_directory('D:/Data/clearness/valid',
                                                   target_size = (224, 224),
                                                   batch_size = batch_size,
+                                                  shuffle = True,
                                                   class_mode = 'categorical')
 
     model.compile(optimizer='Adam', loss='binary_crossentropy', metrics=['accuracy'])
@@ -82,7 +83,7 @@ def main():
 
     loss = LossHistory()
     reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=3, min_lr=0, mode='auto')
-    num_trial = 1
+    num_trial = 5
     tensorboard = TensorBoard(log_dir='./results/logs_{}'.format(num_trial),
                               histogram_freq=0, batch_size=batch_size, 
                               write_graph=True, write_grads=False, write_images=False,
@@ -97,7 +98,7 @@ def main():
     checkpointer = ModelCheckpoint(filepath=filepath, monitor='val_loss', verbose=1, save_best_only=True, mode='min')
 
 
-    num_epoch = 10
+    num_epoch = 1
     val_period = 10
 
 
@@ -110,19 +111,16 @@ def main():
 
     # train_generator.n//train_generator.batch_size
     test_steps = test_generator.n//test_generator.batch_size
-    e_history = model.evaluate_generator(generator=test_generator,
-                             steps=test_steps)
+    history_ev = model.evaluate_generator(generator=test_generator,
+                                          steps=test_steps)
 
+    print(history_ev)
 
-    #with open('./history/train_history', 'wb') as file_pi:
-    #    pickle.dump(history.history, file_pi)
+    print("Done")
 
+    preds = model.predict_generator(generator=test_generator,
+                                    steps=test_steps)
 
-    #model_json = model.to_json()
-    #with open('./model/test.json', 'w') as json_file:
-    #    json_file.write(model_json)
-
-    #model.save_weights("./model/test.h5")
 
 
 if __name__ == '__main__':
