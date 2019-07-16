@@ -83,7 +83,7 @@ def main():
 
     loss = LossHistory()
     reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=3, min_lr=0, mode='auto')
-    num_trial = 5
+    num_trial = 0
     tensorboard = TensorBoard(log_dir='./results/logs_{}'.format(num_trial),
                               histogram_freq=0, batch_size=batch_size, 
                               write_graph=True, write_grads=False, write_images=False,
@@ -98,7 +98,7 @@ def main():
     checkpointer = ModelCheckpoint(filepath=filepath, monitor='val_loss', verbose=1, save_best_only=True, mode='min')
 
 
-    num_epoch = 1
+    num_epoch = 10
     val_period = 10
 
 
@@ -118,8 +118,8 @@ def main():
 
     print("Done")
 
-    preds = model.predict_generator(generator=test_generator,
-                                    steps=test_steps)
+    #preds = model.predict_generator(generator=test_generator,
+    #                                steps=test_steps)
 
 
 
