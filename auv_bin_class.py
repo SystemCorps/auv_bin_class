@@ -32,7 +32,7 @@ def main():
     batch_size = 32
     num_epoch = 10
     val_period = 10
-    num_trial = 20
+    num_trial = 21
 
 
     base_model = MobileNetV2(weights='imagenet', include_top=False)
@@ -107,11 +107,12 @@ def main():
                                   callbacks=[checkpointer, loss, reduce_lr, tensorboard])
 
     # train_generator.n//train_generator.batch_size
-    test_steps = test_generator.n//test_generator.batch_size
-    history_ev = model.evaluate_generator(generator=test_generator,
-                                          steps=test_steps)
 
-    print(history_ev)
+    #test_steps = test_generator.n//test_generator.batch_size
+    #history_ev = model.evaluate_generator(generator=test_generator,
+    #                                      steps=test_steps)
+
+    #print(history_ev)
 
     print("Done")
 

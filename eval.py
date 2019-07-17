@@ -36,7 +36,7 @@ test_generator = test_datagen.flow_from_directory('D:/Data/clearness/valid',
 
 labels = test_generator.classes
 
-for i in range(11,21):
+for i in range(21,22):
     model_path = './results/check/check_%d' % i
     model.load_weights(model_path)
 
